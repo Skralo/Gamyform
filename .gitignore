@@ -7,3 +7,8 @@ data/
 test-results/
 .superpowers/
 *.log
+
+# DRAFTPIN (local dev feedback tool, never committed)
+draftpin.dev.js
+draftpin-server.cjs
+.draftpin/
