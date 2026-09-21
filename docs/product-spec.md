@@ -4,7 +4,7 @@
 **Target repository:** [Skralo/Gamyform](https://github.com/Skralo/Gamyform), public and empty when inspected on 21 September 2026.  
 **Owner:** Anže Skralovnik / SKRALOVNIK.  
 **Prepared:** 21 September 2026.  
-**Status:** Product and engineering specification for review and coding-agent handoff; no application has been built or deployed.  
+**Status:** Product and engineering specification, including MVP requirements and full future vision. The first MVP implementation is included in this repository; it is not publicly deployed. See [verification and remaining release gates](verification.md) for implemented behavior and outstanding checks.  
 **Delivery constraint:** A 2–3 day build sprint. This is a time budget, not a guaranteed delivery estimate.  
 **Document language:** Slovenian executive brief; English specification for direct use by a coding AI agent.
 
