@@ -8,7 +8,7 @@ import {
   act,
   cleanup,
 } from "@testing-library/react";
-import Runner from "../src/game/Runner";
+import Player from "../src/player/Player";
 import { Workspace } from "../src/admin/Workspace";
 import { api } from "../src/api";
 import { seed } from "../src/seed";
@@ -38,11 +38,10 @@ afterEach(() => {
   vi.restoreAllMocks();
   vi.unstubAllGlobals();
 });
+const escape = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 it("cannot skip twice when an optional choice is transitioning", async () => {
-  render(<Runner path="/demo" />);
-  fireEvent.click(
-    await screen.findByRole("button", { name: /Prefer a classic form/ }),
-  );
+  render(<Player path="/demo" />);
+  fireEvent.click(await screen.findByRole("button", { name: "Start" }));
   expect(
     screen.getByRole("heading", { name: seed.questions[0].label }),
   ).toBeTruthy();
@@ -60,6 +59,45 @@ it("cannot skip twice when an optional choice is transitioning", async () => {
   expect(
     screen.queryByRole("heading", { name: seed.questions[2].label }),
   ).toBeNull();
+});
+it("continues text with Enter and returns to review after an edit", async () => {
+  render(<Player path="/demo" />);
+  fireEvent.click(await screen.findByRole("button", { name: "Start" }));
+  vi.useFakeTimers();
+  fireEvent.click(
+    screen.getByRole("button", { name: seed.questions[0].options![1].label }),
+  );
+  await act(async () => {
+    vi.advanceTimersByTime(350);
+  });
+  fireEvent.click(screen.getByRole("button", { name: "Skip" }));
+  const name = screen.getByRole("textbox", { name: seed.questions[2].label });
+  fireEvent.change(name, { target: { value: "  Ana  " } });
+  fireEvent.submit(name.closest("form")!);
+  const email = screen.getByRole("textbox", { name: seed.questions[3].label });
+  fireEvent.change(email, { target: { value: "not-an-email" } });
+  fireEvent.submit(email.closest("form")!);
+  expect(screen.getByRole("alert").textContent).toMatch(/valid email/);
+  fireEvent.change(email, { target: { value: "ana@example.com" } });
+  fireEvent.submit(email.closest("form")!);
+  const note = screen.getByRole("textbox", { name: seed.questions[4].label });
+  fireEvent.keyDown(note, { key: "Enter" });
+  expect(
+    screen.getByRole("heading", { name: "Check your answers" }),
+  ).toBeTruthy();
+  expect(screen.getByText("Ana")).toBeTruthy();
+  fireEvent.click(
+    screen.getByRole("button", {
+      name: new RegExp(escape(seed.questions[2].label)),
+    }),
+  );
+  const again = screen.getByRole("textbox", { name: seed.questions[2].label });
+  fireEvent.change(again, { target: { value: "Ana Novak" } });
+  fireEvent.submit(again.closest("form")!);
+  expect(
+    screen.getByRole("heading", { name: "Check your answers" }),
+  ).toBeTruthy();
+  expect(screen.getByText("Ana Novak")).toBeTruthy();
 });
 it("closing a form does not adopt a newer revision belonging to another draft", async () => {
   const f = {

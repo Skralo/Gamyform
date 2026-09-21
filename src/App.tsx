@@ -1,7 +1,7 @@
 import { useState, useEffect, lazy, Suspense } from "react";
 import { api } from "./api";
 import { Login, Workspace } from "./admin/Workspace";
-const Runner = lazy(() => import("./game/Runner"));
+const Player = lazy(() => import("./player/Player"));
 export default function App() {
   const [path, setPath] = useState(location.pathname),
     [status, setStatus] = useState<any>(),
@@ -22,10 +22,8 @@ export default function App() {
     path.startsWith("/preview/")
   )
     return (
-      <Suspense
-        fallback={<div className="loading-page">Opening your experience…</div>}
-      >
-        <Runner key={path} path={path} />
+      <Suspense fallback={<div className="loading-page">Loading…</div>}>
+        <Player key={path} path={path} />
       </Suspense>
     );
   if (!status)
