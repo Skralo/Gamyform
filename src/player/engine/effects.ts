@@ -109,7 +109,7 @@ export class Effects {
       color: "#ffffff",
       roughness: 0.02,
       transparent: true,
-      opacity: 0.34,
+      opacity: 0.55,
       iridescence: 1,
       iridescenceIOR: 1.33,
       iridescenceThicknessRange: [120, 480],
@@ -244,7 +244,7 @@ export class Effects {
         const fade = 1 - t;
         this.tmp.x += Math.sin(f.age * 18 + i * 2.1) * 0.035 * fade * (f.spread[i] - 0.5) * 2;
         this.tmp.y += Math.cos(f.age * 15 + i) * 0.025 * fade;
-        this.bubbles[inFront ? "fx" : "world"].push(this.tmp, 0.024 + f.spread[i] * 0.03);
+        this.bubbles[inFront ? "fx" : "world"].push(this.tmp, 0.045 + f.spread[i] * 0.045);
       } else if (f.mesh) {
         f.mesh.position.copy(this.tmp);
         f.mesh.rotation.x += dt * 14;

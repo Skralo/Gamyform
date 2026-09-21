@@ -126,6 +126,8 @@ export class Engine {
     this.resizeObserver = new ResizeObserver(() => this.resize());
     this.resizeObserver.observe(host);
     this.resize();
+    this.viewmodel.update(0, 0, this.camera);
+    this.render();
     this.raf = requestAnimationFrame(this.frame);
     if (import.meta.env.DEV) this.installTestHook();
   }
@@ -258,7 +260,12 @@ export class Engine {
 
   private frame = (now: number) => {
     if (this.disposed) return;
-    const dt = Math.min(0.05, (now - this.last) / 1000);
+    this.tick(now);
+    this.raf = requestAnimationFrame(this.frame);
+  };
+
+  private tick(now: number) {
+    const dt = Math.max(0, Math.min(0.05, (now - this.last) / 1000));
     this.last = now;
     this.watchPerformance(dt, now);
     if (this.recenter) this.stepRecenter(now);
@@ -266,13 +273,16 @@ export class Engine {
     this.world.update(now / 1000);
     this.viewmodel.update(dt, now / 1000, this.camera);
     this.effects.update(fxDt, dt);
+    this.render();
+    if (this.locked && this.active)
+      this.setAim(closestTarget(document.elementFromPoint(this.centre.x, this.centre.y)));
+  }
+
+  private render() {
     this.worldRenderer.render(this.worldScene, this.camera);
     this.cssRenderer.render(this.cssScene, this.camera);
     this.fxRenderer.render(this.fxScene, this.camera);
-    if (this.locked && this.active)
-      this.setAim(closestTarget(document.elementFromPoint(this.centre.x, this.centre.y)));
-    this.raf = requestAnimationFrame(this.frame);
-  };
+  }
 
   private stepRecenter(now: number) {
     const r = this.recenter!;
@@ -335,6 +345,10 @@ export class Engine {
       fire: () => {
         this.gate.release();
         this.shoot();
+      },
+      look: (yaw: number, pitch: number) => this.camera.rotation.set(pitch, yaw, 0, "YXZ"),
+      advance: (ms: number) => {
+        for (let t = 0; t < ms; t += 1000 / 60) this.tick(this.last + 1000 / 60);
       },
       state: () => ({
         active: this.active,

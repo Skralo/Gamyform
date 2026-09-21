@@ -101,13 +101,14 @@ export class Viewmodel {
       cuff = this.accent(accent);
     const hand = new THREE.Group();
     hand.rotation.set(0.35, -0.3, 0.12);
+    hand.position.set(-0.02, -0.02, -0.03);
     this.rig.add(hand);
     this.part(new THREE.BoxGeometry(0.09, 0.036, 0.1), glove, [0, 0, 0], [0, 0, 0], hand);
     for (let i = 0; i < 4; i++)
       this.part(new THREE.BoxGeometry(0.019, 0.023, 0.062), glove, [-0.032 + i * 0.021, 0.012, -0.072], [0.55, 0, 0], hand);
     this.part(new THREE.BoxGeometry(0.024, 0.024, 0.052), glove, [0.054, 0.008, -0.02], [0, -0.7, 0], hand);
     this.part(new THREE.CylinderGeometry(0.052, 0.052, 0.05, 10), cuff, [0, 0, 0.072], [Math.PI / 2, 0, 0], hand);
-    this.held = this.part(new THREE.IcosahedronGeometry(0.055, 1), this.accent(accent, { roughness: 0.35 }), [0, 0.055, -0.05], [0, 0, 0], hand);
+    this.held = this.part(new THREE.IcosahedronGeometry(0.042, 1), this.accent(accent, { roughness: 0.35 }), [0, 0.048, -0.05], [0, 0, 0], hand);
     this.muzzle.position.set(0, 0.06, -0.07);
     hand.add(this.muzzle);
   }
