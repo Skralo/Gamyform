@@ -2,6 +2,24 @@ import { newId } from "./id";
 import { z } from "zod";
 
 const id = z.string().regex(/^[a-zA-Z0-9_-]{1,80}$/);
+export const TOOLS = ["water", "bubbles", "throw"] as const;
+export type ToolId = (typeof TOOLS)[number];
+export const DEFAULT_EXPERIENCE = {
+  tool: "water",
+  accent: "#4FD1FF",
+  world: "terrace",
+} as const;
+const experienceSchema = z
+  .object({
+    tool: z.enum(TOOLS).default(DEFAULT_EXPERIENCE.tool),
+    accent: z
+      .string()
+      .regex(/^#[0-9a-fA-F]{6}$/, "Use a hex color like #4FD1FF.")
+      .default(DEFAULT_EXPERIENCE.accent),
+    world: z.enum(["terrace"]).default(DEFAULT_EXPERIENCE.world),
+  })
+  .strict();
+export type Experience = z.infer<typeof experienceSchema>;
 const questionSchema = z
   .object({
     id,
@@ -72,6 +90,7 @@ export const definitionSchema = z
         message: z.string().max(500),
       })
       .strict(),
+    experience: experienceSchema.optional(),
   })
   .strict()
   .superRefine((d, c) => {
@@ -90,6 +109,9 @@ export type Answer = string | number | boolean | null;
 export type Answers = Record<string, Answer>;
 export function validateDefinition(input: unknown): Definition {
   return definitionSchema.parse(input);
+}
+export function experienceOf(d: Pick<Definition, "experience">): Experience {
+  return { ...DEFAULT_EXPERIENCE, ...d.experience };
 }
 export function answerSchema(q: Question): z.ZodTypeAny {
   let s: z.ZodTypeAny;

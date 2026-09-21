@@ -5,6 +5,7 @@ import {
   csvCell,
   stepNumber,
   ShotGate,
+  experienceOf,
 } from "../src/domain";
 const def = {
   schemaVersion: 1,
@@ -80,6 +81,38 @@ describe("form contracts", () => {
   it("escapes CSV formulas, quotes and newlines", () => {
     expect(csvCell("=SUM(1)")).toBe('"\'=SUM(1)"');
     expect(csvCell('a"b\nc')).toBe('"a""b\nc"');
+  });
+  it("defaults the experience when a form has none", () => {
+    expect(experienceOf(validateDefinition(def))).toEqual({
+      tool: "water",
+      accent: "#4FD1FF",
+      world: "terrace",
+    });
+  });
+  it("accepts supported tools and hex accents", () => {
+    const d = validateDefinition({
+      ...def,
+      experience: { tool: "bubbles", accent: "#112233", world: "terrace" },
+    });
+    expect(experienceOf(d)).toEqual({
+      tool: "bubbles",
+      accent: "#112233",
+      world: "terrace",
+    });
+    expect(experienceOf(validateDefinition({ ...def, experience: {} })).tool).toBe(
+      "water",
+    );
+  });
+  it("rejects unknown tools, non-hex accents and extra experience keys", () => {
+    expect(() =>
+      validateDefinition({ ...def, experience: { tool: "rifle" } }),
+    ).toThrow();
+    expect(() =>
+      validateDefinition({ ...def, experience: { accent: "red" } }),
+    ).toThrow();
+    expect(() =>
+      validateDefinition({ ...def, experience: { tool: "water", sound: "x" } }),
+    ).toThrow();
   });
   it("ignores stale and repeated shot events", () => {
     const g = new ShotGate();
