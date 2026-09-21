@@ -102,6 +102,11 @@ export default function GameView({
 
   async function lock(first: boolean) {
     if (!engine) return false;
+    if (import.meta.env.DEV && new URLSearchParams(location.search).has("nolock")) {
+      (window as unknown as { __gf?: { fakeLock(): void } }).__gf?.fakeLock();
+      void sound.unlock();
+      return true;
+    }
     const pending = engine.lock();
     void sound.unlock();
     const ok = await pending;

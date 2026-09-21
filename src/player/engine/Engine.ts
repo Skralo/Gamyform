@@ -77,7 +77,7 @@ export class Engine {
     private opts: EngineOptions,
   ) {
     this.worldRenderer.shadowMap.enabled = true;
-    this.worldRenderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    this.worldRenderer.shadowMap.type = THREE.PCFShadowMap;
     this.worldRenderer.domElement.className = "gf-layer gf-world";
     this.cssRenderer.domElement.className = "gf-layer gf-css3d";
     this.fxRenderer.domElement.className = "gf-layer gf-fxlayer";
@@ -332,7 +332,20 @@ export class Engine {
         this.camera.rotation.set(Math.asin(d.y), Math.atan2(-d.x, -d.z), 0, "YXZ");
         return true;
       },
-      fire: () => this.shoot(),
+      fire: () => {
+        this.gate.release();
+        this.shoot();
+      },
+      state: () => ({
+        active: this.active,
+        pending: this.pending,
+        locked: this.locked,
+        generation: this.generation,
+        lastFrame: Math.round(this.last),
+        disposed: this.disposed,
+        cssConnected: this.cssRenderer.domElement.isConnected,
+        panelConnected: this.panelElement.isConnected,
+      }),
     };
   }
 

@@ -37,6 +37,7 @@ export class Viewmodel {
     private reduced: boolean,
   ) {
     this.group.add(this.rig);
+    this.rig.scale.setScalar(0.8);
     if (tool === "water") this.buildWater(accent);
     else if (tool === "bubbles") this.buildBubbles(accent);
     else this.buildThrow(accent);
@@ -133,9 +134,9 @@ export class Viewmodel {
     const bob = this.reduced ? 0 : Math.sin(t * 1.7) * 0.004;
     this.group.position.copy(camera.position);
     this.group.quaternion.copy(camera.quaternion);
-    this.group.translateX(0.25 + sx);
-    this.group.translateY(-0.24 + bob + sy);
-    this.group.translateZ(-0.5);
+    this.group.translateX(0.29 + sx);
+    this.group.translateY(-0.27 + bob + sy);
+    this.group.translateZ(-0.56);
     this.rig.position.z = r * 0.03;
     this.rig.rotation.x = r * (this.tool === "throw" ? -0.09 : 0.07);
     if (this.pump) this.pump.position.z = -0.11 + Math.max(0, r) * 0.02;

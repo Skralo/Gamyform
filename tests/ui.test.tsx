@@ -99,6 +99,46 @@ it("continues text with Enter and returns to review after an edit", async () => 
   ).toBeTruthy();
   expect(screen.getByText("Ana Novak")).toBeTruthy();
 });
+it("saves the chosen tool and accent from the experience settings", async () => {
+  const f = {
+    id: "f1",
+    slug: "test",
+    definition: structuredClone(seed),
+    revision: 1,
+    status: "draft",
+    current_version: null,
+    responses: 0,
+    created_at: new Date().toISOString(),
+  };
+  let saved: any;
+  vi.mocked(api).mockImplementation(async (url, method, body) => {
+    if (url === "/owner/forms") return { forms: [f] };
+    if (method === "PUT") {
+      saved = body;
+      return { ...f, revision: 2, definition: (body as any).definition };
+    }
+    return f;
+  });
+  render(
+    <Workspace path="/forms/f1" aiConfigured={false} onLogout={() => {}} />,
+  );
+  fireEvent.click(
+    await screen.findByRole("button", { name: "Experience settings" }),
+  );
+  fireEvent.change(screen.getByRole("combobox", { name: /^Tool/ }), {
+    target: { value: "bubbles" },
+  });
+  fireEvent.input(screen.getByLabelText("Accent color"), {
+    target: { value: "#ff0066" },
+  });
+  fireEvent.click(screen.getByRole("button", { name: /Save/ }));
+  await waitFor(() => expect(saved).toBeDefined());
+  expect(saved.definition.experience).toEqual({
+    tool: "bubbles",
+    accent: "#ff0066",
+    world: "terrace",
+  });
+});
 it("closing a form does not adopt a newer revision belonging to another draft", async () => {
   const f = {
     id: "f1",

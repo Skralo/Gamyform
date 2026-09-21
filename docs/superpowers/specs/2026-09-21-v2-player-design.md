@@ -118,7 +118,7 @@ Decals use `DecalGeometry` with procedurally drawn textures (no image files), po
 | Rule | Source |
 |---|---|
 | Response in the same frame as the click (kick + sound) | "Juice it or lose it" (Jonasson & Purho, 2012) |
-| Hit-stop: FX time freezes 50 ms on a valid answer hit | Fighting-game hit-stop; "The Art of Screenshake" (Nijman, 2013) |
+| Hit-stop: effects run at 5% speed for 60 ms on a valid answer hit; rendering never stops | Fighting-game hit-stop; "The Art of Screenshake" (Nijman, 2013); threejs-gameplay-systems game-feel reference |
 | Card squash & settle: 0.96 → 1.02 → 1 | Squash/stretch, animation principles |
 | Permanence: decals linger, then fade | "The Art of Screenshake" |
 | Variation: ±6% pitch per shot, randomised particle spread | "Juice it or lose it" |

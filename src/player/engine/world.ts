@@ -148,19 +148,19 @@ export function buildTerrace(p: Palette): WorldHandle {
     add(new THREE.BoxGeometry(1.7, 0.02, 1.7), mats.stoneDark, [-3.6 + i * 1.8, 0.125, -1.2], { shadow: false });
 
   // Arch that frames the panel and catches shots behind it
-  for (const x of [-4.6, 4.6]) {
-    add(new THREE.BoxGeometry(1.1, 0.3, 1.1), mats.stoneDark, [x, 0.27, -2.6]);
-    add(new THREE.BoxGeometry(0.85, 4.4, 0.85), mats.stone, [x, 2.5, -2.6]);
-    add(new THREE.BoxGeometry(1.05, 0.28, 1.05), mats.stoneDark, [x, 4.76, -2.6]);
+  for (const x of [-5.4, 5.4]) {
+    add(new THREE.BoxGeometry(1.1, 0.3, 1.1), mats.stoneDark, [x, 0.27, -4.3]);
+    add(new THREE.BoxGeometry(0.85, 4.4, 0.85), mats.stone, [x, 2.5, -4.3]);
+    add(new THREE.BoxGeometry(1.05, 0.28, 1.05), mats.stoneDark, [x, 4.76, -4.3]);
   }
-  add(new THREE.BoxGeometry(10.6, 0.7, 1.0), mats.stone, [0, 5.25, -2.6]);
-  add(new THREE.BoxGeometry(10.9, 0.14, 1.12), mats.stoneDark, [0, 4.86, -2.6]);
+  add(new THREE.BoxGeometry(12.2, 0.7, 1.0), mats.stone, [0, 5.25, -4.3]);
+  add(new THREE.BoxGeometry(12.5, 0.14, 1.12), mats.stoneDark, [0, 4.86, -4.3]);
 
   // Hedge wall behind the arch, broken into blocks for a hand-made silhouette
   const r = rng(11);
-  for (let i = 0; i < 9; i++) {
-    const h = 2.2 + r() * 0.8;
-    add(new THREE.BoxGeometry(1.95, h, 1.4), i % 2 ? mats.foliageA : mats.foliageB, [-8 + i * 2, h / 2, -6.4 - r() * 0.3]);
+  for (let i = 0; i < 11; i++) {
+    const h = 2.2 + r() * 0.9;
+    add(new THREE.BoxGeometry(1.95, h, 1.4), i % 2 ? mats.foliageA : mats.foliageB, [-10 + i * 2, h / 2, -8.6 - r() * 0.3]);
   }
 
   // Pool (left) and planter with shrubs (right) at the terrace sides
@@ -215,7 +215,7 @@ export function buildTerrace(p: Palette): WorldHandle {
     add(new THREE.DodecahedronGeometry(s, 0), mats.stone, [x, s * 0.45, z], { rot: [r() * 3, r() * 3, r() * 3], scale: [1.2, 0.8, 1] });
     contact(x, z, s * 3);
   }
-  for (const x of [-4.6, 4.6]) contact(x, -2.6, 2.4, 0.13);
+  for (const x of [-5.4, 5.4]) contact(x, -4.3, 2.4, 0.13);
 
   // Layered background silhouettes for depth
   for (let i = 0; i < 9; i++) {

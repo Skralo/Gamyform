@@ -30,8 +30,17 @@ import {
   validateDefinition,
   newQuestion,
   answerLabel,
+  experienceOf,
+  TOOLS,
   type Definition,
+  type ToolId,
 } from "../domain";
+
+const toolNames: Record<ToolId, string> = {
+  water: "Water gun",
+  bubbles: "Bubble gun",
+  throw: "Throw",
+};
 import { QuestionEditor, types } from "./QuestionEditor";
 import { FormWrapper } from "../components/FormWrapper";
 import { z } from "zod";
@@ -546,6 +555,7 @@ function Editor({ id }: { id: string }) {
       <main className="workspace-main">{error || "Opening your studio…"}</main>
     );
   const q = def.questions[selected];
+  const exp = experienceOf(def);
   const reorder = (delta: number) => {
     const qs = [...def.questions];
     const to = selected + delta;
@@ -818,12 +828,39 @@ function Editor({ id }: { id: string }) {
           </div>
         ) : (
           <div className="settings-panel">
-            <div className="scene-swatch">
+            <div className="scene-swatch" style={{ background: exp.accent }}>
               <Target size={60} />
-              <span>SKRALOVNIK / THE COURTYARD</span>
-              <strong>Your world, in deep teal & gold.</strong>
+              <span>{toolNames[exp.tool]}</span>
             </div>
             <div>
+              <label>
+                Tool
+                <select
+                  value={exp.tool}
+                  onChange={(e) =>
+                    change({
+                      ...def,
+                      experience: { ...exp, tool: e.target.value as ToolId },
+                    })
+                  }
+                >
+                  {TOOLS.map((tool) => (
+                    <option key={tool} value={tool}>
+                      {toolNames[tool]}
+                    </option>
+                  ))}
+                </select>
+              </label>
+              <label>
+                Accent color
+                <input
+                  type="color"
+                  value={exp.accent.toLowerCase()}
+                  onChange={(e) =>
+                    change({ ...def, experience: { ...exp, accent: e.target.value } })
+                  }
+                />
+              </label>
               <label>
                 Form language
                 <select
@@ -876,10 +913,6 @@ function Editor({ id }: { id: string }) {
                   }
                 />
               </label>
-              <p className="muted">
-                One handcrafted scene. Desktop controls. Sound and reduced
-                motion can be adjusted by each visitor.
-              </p>
             </div>
           </div>
         )}

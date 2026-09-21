@@ -24,9 +24,11 @@ Published forms continue serving their last published version when their draft i
 
 ## Controls
 
-Use a current desktop browser with WebGL 2 and pointer lock. The first click starts the experience; the practice target never records an answer. Move the mouse to look around; left click fires. The character cannot walk. Single-choice targets select and advance after a short feedback delay. Number fields use +/− and a separate confirmation target. The virtual keyboard has letters, digits, email punctuation, spaces, backspace and caps, including č/š/ž. Physical typing is available from **Type**. **Esc** releases the pointer and opens pause controls; recenter, sound volume, reduced motion and standard mode are available there. There are no timers, scores, ammunition limits or penalties.
+Use a current desktop browser with WebGL 2 and pointer lock. **Start** captures the mouse; the first question pops in right away. Move the mouse to look around and aim; the answer under the crosshair lights up. Left click shoots: the tool fires, the projectile lands, and the answer is recorded. The target is decided at the moment of the click, and the projectile only shows it. Numbers use **−** and **+** targets (or typing) and **Continue**. Name, email and other text are typed normally; **Enter** continues. **Esc** pauses: Resume, Sound and Use standard form. There are no timers, scores or penalties.
 
-A classic keyboard-accessible form uses the same question schema and answer state. Unsupported WebGL or pointer lock offers this fallback. Mobile gameplay is outside this MVP.
+Each form picks a tool in **Experience settings**: water gun (default), bubble gun or throw, plus an accent color. The public `/demo` accepts `?tool=bubbles` or `?tool=throw`.
+
+The standard form uses the same glass panel without 3D, with full keyboard support. It is offered automatically when WebGL or pointer lock is unavailable. Mobile gameplay is outside this version.
 
 ## Optional AI drafts
 
@@ -87,7 +89,7 @@ See [the verification record](docs/verification.md) for what was actually tested
 ## Architecture and source reuse
 
 - React + Vite + TypeScript; React Hook Form and shared Zod definitions.
-- Three.js + React Three Fiber, raycast targets and procedural 3D geometry. No image pretending to be a 3D game.
+- Three.js with three stacked layers — a WebGL world, the glass panel as real HTML in 3D (CSS3DRenderer) and a WebGL effects layer — sharing one camera and one frame loop. Procedural low-poly geometry; no image pretending to be a 3D game.
 - Fastify API, bcrypt owner login, PostgreSQL-compatible storage, immutable publishing, idempotent submission retries and formula-safe CSV.
 - Original synthesized Web Audio effects; no licensed game assets or sound downloads.
 - Selected code adapted from **Hasan Harman's MIT form-builder**, pinned to a specific commit, with original source and license preserved. See [upstream provenance](docs/upstream-provenance.md).

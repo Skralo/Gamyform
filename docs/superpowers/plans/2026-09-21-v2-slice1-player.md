@@ -17,7 +17,7 @@
 - No new npm dependencies. Remove `@react-three/fiber` once the old runner is deleted.
 - Server, API, database and domain validation rules stay unchanged except the optional `experience` field.
 - `experience` defaults: `tool: "water"`, `accent: "#4FD1FF"`, `world: "terrace"`; `schemaVersion` stays `1`.
-- Flight times: water 140 ms, bubbles 220 ms, throw 260 ms. Hit-stop 50 ms. Decal pool 24. WebGL pixel ratio cap 1.5.
+- Flight times: water 140 ms, bubbles 220 ms, throw 260 ms. Hit-stop 60 ms at 5% speed. Decal pool 24. WebGL pixel ratio cap 1.5.
 - Reduced motion follows `prefers-reduced-motion`. No camera shake.
 - Player CSS is scoped under `.gf-root`; imperative state on DOM targets uses attributes (`data-aim`, `data-hit`), never classes React owns.
 - All existing tests stay green. Commit after each task; push `feat/v2` to `origin`.

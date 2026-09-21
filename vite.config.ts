@@ -6,10 +6,7 @@ export default defineConfig({
     rollupOptions: {
       output: {
         manualChunks: (id) =>
-          id.includes("node_modules/three/") ||
-          id.includes("node_modules/@react-three/")
-            ? "three"
-            : undefined,
+          id.includes("node_modules/three/") ? "three" : undefined,
       },
     },
   },
